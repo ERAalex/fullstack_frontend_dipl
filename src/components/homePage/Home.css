@@ -1,0 +1,27 @@
+.home-container {
+    text-align: center;
+    margin-top: 50px;
+    margin-left: 300px;
+  }
+  
+  .title {
+    color: #333;
+  }
+  
+  .description {
+    color: #666;
+  }
+  
+  .link {
+    margin-top: 20px;
+    display: inline-block;
+    padding: 10px 20px;
+    text-decoration: none;
+    background-color: #4caf50;
+    color: white;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 16px;
+    margin-right: 10px;
+    cursor: pointer;
+  }

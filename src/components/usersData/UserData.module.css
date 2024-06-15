@@ -1,0 +1,23 @@
+.userIcon {
+  height: 2rem;
+}
+
+.blockUser {
+  display: flex;
+  /* width: 9rem; */
+  column-gap: 1rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.inputBlock {
+  display: flex;
+  width: 13rem;
+  justify-content: space-between;
+}
+
+.aboutUser {
+  display: flex;
+  flex-direction: column;
+  cursor: default;
+}
