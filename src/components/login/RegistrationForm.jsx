@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
 import './Registration.css';
-import Registration from "./Registration.jsx";
+import { registerUser } from '../../redux/usersActions.js'
 
 const RegistrationForm = () => {
   const navigate = useNavigate();
@@ -16,6 +15,7 @@ const RegistrationForm = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
+    console.log(formData)
   };
 
   const handleSubmit = async (e) => {
@@ -29,22 +29,15 @@ const RegistrationForm = () => {
     }
 
     try {
-      // Replace with your registration API endpoint
-      const response = await fetch('/api/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+      const response = await registerUser(formData)
 
-      if (response.ok) {
-        // Handle successful registration (e.g., navigate to login page)
-        navigate('/login');
+      if (response.success) {
+        // navigate('/login');
+        navigate('/login', { state: { message: 'Удачная регистрация! Вы можете войти.' } });
       } else {
-        const errorData = await response.json();
-        setError(errorData.message || 'Registration failed.');
+        setError('Registration failed.');
       }
+
     } catch (error) {
       console.error('Error during registration:', error);
       setError('An unexpected error occurred. Please try again.');

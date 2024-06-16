@@ -34,8 +34,6 @@ export const checkToken = async (navigate) => {
 
 
 
-
-
 export const fetchUsers = () => {
     return async (dispatch) => {
       try {
@@ -64,20 +62,29 @@ export const fetchUsers = () => {
 
 
 export const registerUser = async (formData) => {
+    /**
+   * Registers a new user with the provided form data.
+   *
+   * This function sends a POST request to the registration API endpoint with the user's
+   * details. If the registration is successful, it returns an object indicating success.
+   *
+   * @async
+   * @param {Object} formData - The form data containing user registration details.
+   * @param {string} formData.username - The username of the new user.
+   * @param {string} formData.password - The password of the new user.
+   * @param {string} formData.email - The email address of the new user.
+
+   also is added new model value - storage_path
+   */
+
     try {
       const requestData = {
-        user: {
           username: formData.username,
           password: formData.password,
           email: formData.email,
-        },
-        full_name: formData.fullName,
-        is_admin: false,
-        storage_path: `${formData.username}/`,
-        email: formData.email,
       };
   
-      const response = await fetch(`${apiUrl}/api/users/register/`, {
+      const response = await fetch(`${apiUrl}/api/create-user/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -86,7 +93,9 @@ export const registerUser = async (formData) => {
       });
   
       if (!response.ok) {
+        console.log('---json1----')
         const errorData = await response.json();
+        console.log('---json2----')
         if (errorData.error) {
           return { success: false, error: errorData.error };
         } else {

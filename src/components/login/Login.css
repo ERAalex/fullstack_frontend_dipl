@@ -9,3 +9,9 @@
 .link-register {
     text-align: center;
 }
+
+.success-message {
+  color: green;
+  margin-bottom: 10px;
+  text-align: center;
+}
