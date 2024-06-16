@@ -106,24 +106,16 @@ export const registerUser = async (formData) => {
         return { success: true };
       }
     } catch (error) {
-      console.error('Error during registration:', error);
-      return { success: false, error: 'An unexpected error occurred during registration.' };
+      console.error('Произошла ошибка при регистрации:', error);
+      return { success: false, error: 'Неожиданная ошибка в процессе регистрации.' };
     }
   };
-  
-export default registerUser;
-  
-
 
 
 
 export const login = async (formData) => {
     try {
 
-      console.log('--1----')
-      console.log(formData)
-      console.log(JSON.stringify(formData))
-      console.log('--2---')
       const response = await fetch(`${apiUrl}/api/token/`, {
         method: 'POST',
         headers: {
@@ -135,10 +127,73 @@ export const login = async (formData) => {
   
       if (response.ok) {
         const userData = await response.json();
-        // save token recived from backend
+
         console.log(userData)
-        console.log(userData.refresh)
-        localStorage.setItem('authorization', userData.authorization);
+        console.log(userData.access)
+        // save token
+        localStorage.setItem('authorization', `Bearer ${userData.access}`);
+
+      // Now get information about account
+      const accountDataResult = await accountinfo();
+
+      // proceed and return True to pass to /files
+      if (accountDataResult.success) {
+        return { success: true };
+      } else {
+        return { success: false, error: accountDataResult.error };
+      }
+    } else {
+      const errorData = await response.json();
+      return { success: false, error: errorData.error };
+    }
+  } catch (error) {
+    console.error('Error during login:', error);
+    return { success: false, error: 'An unexpected error occurred during login.' };
+  }
+};
+
+
+  //       localStorage.setItem('currentuser', userData.currentuser);
+  //       localStorage.setItem('isAdmin', userData.isAdmin)
+  //       return { success: true };
+  //     } else {
+  //       const errorData = await response.json();
+  //       return { success: false, error: errorData.error };
+  //     }
+  //   } catch (error) {
+  //     console.error('Error during login:', error);
+  //     return { success: false, error: 'An unexpected error occurred during login.' };
+  //   }
+  // };
+  //
+
+export const accountinfo = async () => {
+    /**
+   * Fetches the account information of the currently authenticated user.
+   *
+   * This function sends a GET request to the `/api/data-user/` endpoint to retrieve
+   * the user's account information. The request includes the authorization token
+   * stored in localStorage.
+   *
+   * @async
+   * this method is used in 'login'
+   */
+
+    try {
+      const token = localStorage.getItem('authorization')
+      console.log('---accountinfo----')
+
+      const response = await fetch(`${apiUrl}/api/data-user/`, {
+          method: 'GET',
+          headers: {
+            'Authorization': token,
+          },
+        });
+
+      if (response.ok) {
+        const userData = await response.json();
+
+        // now get information about account
         localStorage.setItem('currentuser', userData.currentuser);
         localStorage.setItem('isAdmin', userData.isAdmin)
         return { success: true };
@@ -151,7 +206,7 @@ export const login = async (formData) => {
       return { success: false, error: 'An unexpected error occurred during login.' };
     }
   };
-  
+
 
 export const logout = () => {
     return async (dispatch) => {
