@@ -1,6 +1,41 @@
 import { fetchUsersSuccess, fetchUsersFailure } from './usersReducers';
 import apiUrl from './apiConfig'
 
+
+
+export const checkToken = async (navigate) => {
+  /**
+   * Asynchronously checks the validity of the authorization token stored in localStorage.
+   * If the token is missing, undefined, or invalid, the user is redirected to the login page.
+   *
+   * @param {function} navigate - The navigation function to redirect the user.
+   * @returns {Promise<{isValid: boolean, error?: string}>} - An object indicating whether the token is valid and any error message if applicable.
+   *
+   */
+  try {
+    const token = localStorage.getItem('authorization');
+
+    if (token === 'undefined') {
+      console.log('----token is undefined---');
+      navigate('/login');
+      return { isValid: false };
+    }
+
+    if (!token) {
+      console.log('----undef---1--')
+      navigate('/login');
+    }
+
+  } catch (error) {
+    console.error('Error during token verification:', error);
+    return { isValid: false, error: 'An unexpected error occurred during token verification.' };
+  }
+};
+
+
+
+
+
 export const fetchUsers = () => {
     return async (dispatch) => {
       try {
@@ -24,6 +59,9 @@ export const fetchUsers = () => {
       }
     };
   };
+
+
+
 
 export const registerUser = async (formData) => {
     try {
@@ -67,9 +105,17 @@ export const registerUser = async (formData) => {
 export default registerUser;
   
 
+
+
+
 export const login = async (formData) => {
     try {
-      const response = await fetch(`${apiUrl}/api/users/login/`, {
+
+      console.log('--1----')
+      console.log(formData)
+      console.log(JSON.stringify(formData))
+      console.log('--2---')
+      const response = await fetch(`${apiUrl}/api/token/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -80,6 +126,9 @@ export const login = async (formData) => {
   
       if (response.ok) {
         const userData = await response.json();
+        // save token recived from backend
+        console.log(userData)
+        console.log(userData.refresh)
         localStorage.setItem('authorization', userData.authorization);
         localStorage.setItem('currentuser', userData.currentuser);
         localStorage.setItem('isAdmin', userData.isAdmin)

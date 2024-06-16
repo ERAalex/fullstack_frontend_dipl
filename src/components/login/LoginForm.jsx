@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../../redux/usersActions';
+import { checkToken } from '../../redux/usersActions';
 import { loginSuccess } from '../../redux/usersReducers';
 import { useDispatch } from 'react-redux'
 
@@ -9,6 +10,7 @@ import './LoginForm.css';
 const LoginForm = () => {
   const dispatch = useDispatch(); 
   const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -23,6 +25,7 @@ const LoginForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const loginResult = await login(formData);
 
     if (loginResult.success) {
@@ -30,6 +33,7 @@ const LoginForm = () => {
       if (loginResult.isAdmin) {
         const isAdmin = true;
         dispatch(loginSuccess({ isAdmin }));
+        // redirect to file page
         navigate('/files');
       } else {
         navigate('/files');
