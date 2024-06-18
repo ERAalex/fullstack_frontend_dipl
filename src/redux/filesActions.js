@@ -3,14 +3,15 @@ import apiUrl from './apiConfig'
 
 export const fetchFiles = (userId) => {
     return async (dispatch) => {
+      console.log('--1--1---')
       try {
         const token = localStorage.getItem('authorization');
         const isAdmin = localStorage.getItem('isAdmin') === 'true'
 
-        let url = `${apiUrl}/api/files/get-files/`;
+        let url = `${apiUrl}/files/get_user_files/`;
 
         if (userId) {
-          url += `?user_id=${userId}`;
+          url = `${apiUrl}/files/get_specific_user_files/${userId}`;
         }
         const response = await fetch(url, {
           headers: {
@@ -21,8 +22,9 @@ export const fetchFiles = (userId) => {
         if (!response.ok) {
           throw new Error(`Error fetching files: ${response.statusText}`);
         }
-        
+
         const data = await response.json();
+        console.log(data)
         console.log('Fetched data files:', data)
         dispatch(fetchFilesSuccess(data));
       } catch (error) {
