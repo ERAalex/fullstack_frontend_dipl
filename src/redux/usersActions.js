@@ -194,7 +194,7 @@ export const accountinfo = async () => {
         const userData = await response.json();
 
         // now get information about account
-        localStorage.setItem('currentuser', userData.currentuser);
+        localStorage.setItem('userId', userData.id);
         localStorage.setItem('isAdmin', userData.isAdmin)
         return { success: true };
       } else {

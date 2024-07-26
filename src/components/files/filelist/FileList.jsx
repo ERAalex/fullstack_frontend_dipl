@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { fetchFiles } from '../../../redux/filesActions';
 import { useSelector, useDispatch } from 'react-redux';
@@ -13,8 +12,8 @@ const FilesList = () => {
   const error = useSelector((state) => state.files.error);
 
   useEffect(() => {
-      dispatch(fetchFiles(2));
-  }, [dispatch, 2]);
+      dispatch(fetchFiles());
+  }, [dispatch, ]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -30,10 +29,12 @@ const FilesList = () => {
         <div>No files found.</div>
       ) : (
         files.map((file) => (
-          <div key={file.id} className="file-item">
-            <div className="file-name">{file.name}</div>
-            <div className="file-size">{file.size} bytes</div>
-          </div>
+            <div key={file.id} className="file-item">
+              <div className="file-description">File Name: {file.filename}</div>
+              <div className="file-description">File Size: {file.filesize} bytes</div>
+              <div className="file-description">File Loaded: {file.load_date}</div>
+              <div className="file-description">File Link: {file.external_download_link}</div>
+            </div>
         ))
       )}
     </div>

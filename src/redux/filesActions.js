@@ -3,16 +3,24 @@ import apiUrl from './apiConfig'
 
 export const fetchFiles = (userId) => {
     return async (dispatch) => {
-      console.log('--1--1---')
+
       try {
         const token = localStorage.getItem('authorization');
         const isAdmin = localStorage.getItem('isAdmin') === 'true'
 
         let url = `${apiUrl}/files/get_user_files/`;
 
-        if (userId) {
+        // if we get here userId, then it's admin that want to get some user files
+        if (userId && isAdmin) {
           url = `${apiUrl}/files/get_specific_user_files/${userId}`;
+        // if not, take current user id, to search his files
+        } else {
+        const storedUserId = localStorage.getItem('userId');
+        if (storedUserId) {
+          url = `${apiUrl}/files/get_specific_user_files/${storedUserId}`;
         }
+      }
+
         const response = await fetch(url, {
           headers: {
             'Authorization': token,

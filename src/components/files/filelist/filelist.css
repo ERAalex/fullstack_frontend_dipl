@@ -11,16 +11,13 @@
 .file-item {
   display: flex;
   justify-content: space-between;
+  flex-direction: column;
   padding: 10px;
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
 
-.file-name {
-  font-weight: bold;
-}
-
-.file-size {
-  color: #888;
+.file-description{
+  margin-bottom: 10px;
 }

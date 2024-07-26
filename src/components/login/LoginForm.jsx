@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../../redux/usersActions';
-import { checkToken } from '../../redux/usersActions';
 import { loginSuccess } from '../../redux/usersReducers';
 import { useDispatch } from 'react-redux'
 

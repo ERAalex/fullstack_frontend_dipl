@@ -6,7 +6,6 @@ const FileStore = () => {
 
   return (
     <div className="file-store">
-
         <FileList />
     </div>
   );
