@@ -9,7 +9,7 @@
 }
 
 .file-item {
-  display: flex;
+  position: relative; /* Ensure the parent div is positioned relative */
   justify-content: space-between;
   flex-direction: column;
   padding: 10px;
@@ -21,3 +21,13 @@
 .file-description{
   margin-bottom: 10px;
 }
+
+.delete-icon {
+  position: absolute; /* Position the icon absolutely within the parent div */
+  top: 10px; /* Adjust as needed */
+  right: 10px; /* Adjust as needed */
+  cursor: pointer;
+  color: red;
+  font-size: 18px;
+}
+

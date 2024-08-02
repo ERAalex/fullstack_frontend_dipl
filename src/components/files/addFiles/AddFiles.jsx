@@ -14,8 +14,7 @@ const AddFiles = () => {
 
   const handleUpload = async () => {
     if (file) {
-      console.log('----file--is--')
-      console.log(file)
+
       try {
         const formData = new FormData();
         formData.append('file', file);

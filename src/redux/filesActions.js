@@ -47,10 +47,6 @@ export const uploadFile = (formData) => {
       try {
         const token = localStorage.getItem('authorization');
         
-        console.log('-Uploading--files--1-')
-        console.log(formData)
-        console.log('-Uploading--files--2-')
-
         const response = await fetch(`${apiUrl}/files/upload-file/`, {
           method: 'POST',
           headers: {
@@ -78,7 +74,7 @@ export const uploadFile = (formData) => {
     return async (dispatch) => {
       try {
         const token = localStorage.getItem('authorization');
-        const response = await fetch(`${apiUrl}/api/files/download/${fileId}`, {
+        const response = await fetch(`${apiUrl}/files/download/${fileId}`, {
           method: 'GET',
           headers: {
             'Authorization': token,
@@ -125,7 +121,7 @@ export const renameFile = (fileId, newName) => {
   return async (dispatch) => {
     try {
       const token = localStorage.getItem('authorization');
-      const response = await fetch(`${apiUrl}/api/files/rename/${fileId}`, {
+      const response = await fetch(`${apiUrl}/files/rename/${fileId}`, {
         method: 'PATCH',
         headers: {
           'Authorization': token,
@@ -151,7 +147,7 @@ export const changeComment = (fileId, newComment) => {
   return async (dispatch) => {
     try {
       const token = localStorage.getItem('authorization');
-      const response = await fetch(`${apiUrl}/api/files/comment/${fileId}`, {
+      const response = await fetch(`${apiUrl}/files/comment/${fileId}`, {
         method: 'PATCH',
         headers: {
           'Authorization': token,
@@ -177,7 +173,7 @@ export const deleteFile = (fileId) => {
   return async (dispatch) => {
     try {
       const token = localStorage.getItem('authorization');
-      const response = await fetch(`${apiUrl}/api/files/delete/${fileId}`, {
+      const response = await fetch(`${apiUrl}/files/delete-file/${fileId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': token,
@@ -187,9 +183,7 @@ export const deleteFile = (fileId) => {
       if (!response.ok) {
         throw new Error(`Error deleting file: ${response.statusText}`);
       }
-
-      const data = await response.json();
-      console.log('File deleted successfully:', data);
+      
       dispatch(fetchFiles());
     } catch (error) {
       console.error('Error deleting file:', error.message);

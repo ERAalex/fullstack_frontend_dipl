@@ -3,6 +3,10 @@ import { useEffect } from 'react';
 import { fetchFiles } from '../../../redux/filesActions';
 import { useSelector, useDispatch } from 'react-redux';
 import FileUpload from '../addFiles/AddFiles';
+import { deleteFile } from '../../../redux/filesActions';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 import './filelist.css'
 
@@ -24,6 +28,11 @@ const FilesList = () => {
     return <div>Error: {error}</div>;
   }
 
+  const handleDelete = (fileId) => {
+    dispatch(deleteFile(fileId));
+  };
+
+
   return (
     <div className="files-list">
       {files.length === 0 ? (
@@ -35,6 +44,13 @@ const FilesList = () => {
               <div className="file-description">File Size: {file.filesize} bytes</div>
               <div className="file-description">File Loaded: {file.load_date}</div>
               <div className="file-description">File Link: {file.external_download_link}</div>
+
+              {/* <button className="delete-button" onClick={() => handleDelete(file.id)}>
+                  Delete
+              </button> */}
+
+              <FontAwesomeIcon icon={faTimes} className="delete-icon" onClick={() => handleDelete(file.id)}/>
+
             </div>
         ))
       )}
