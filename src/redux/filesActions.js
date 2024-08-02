@@ -46,8 +46,12 @@ export const uploadFile = (formData) => {
     return async (dispatch) => {
       try {
         const token = localStorage.getItem('authorization');
-  
-        const response = await fetch(`${apiUrl}/api/files/upload/`, {
+        
+        console.log('-Uploading--files--1-')
+        console.log(formData)
+        console.log('-Uploading--files--2-')
+
+        const response = await fetch(`${apiUrl}/files/upload-file/`, {
           method: 'POST',
           headers: {
             'Authorization': token,
@@ -68,6 +72,8 @@ export const uploadFile = (formData) => {
     };
   };
   
+
+
   export const downloadFile = (fileId) => {
     return async (dispatch) => {
       try {

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { fetchFiles } from '../../../redux/filesActions';
 import { useSelector, useDispatch } from 'react-redux';
+import FileUpload from '../addFiles/AddFiles';
 
 import './filelist.css'
 
@@ -37,6 +38,8 @@ const FilesList = () => {
             </div>
         ))
       )}
+
+      <FileUpload />
     </div>
   );
 };
