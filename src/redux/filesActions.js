@@ -117,17 +117,17 @@ export const uploadFile = (formData) => {
       };
       };
   
-export const renameFile = (fileId, newName) => {
+export const changeFile = (fileId, newName, newDescription) => {
   return async (dispatch) => {
     try {
       const token = localStorage.getItem('authorization');
-      const response = await fetch(`${apiUrl}/files/rename-file/${fileId}`, {
+      const response = await fetch(`${apiUrl}/files/change-file/${fileId}`, {
         method: 'PATCH',
         headers: {
           'Authorization': token,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ new_name: newName }),
+        body: JSON.stringify({ new_name: newName, new_description: newDescription }),
       });
 
       if (!response.ok) {

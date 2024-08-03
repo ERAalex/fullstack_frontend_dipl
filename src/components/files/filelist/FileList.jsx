@@ -7,7 +7,7 @@ import FileUpload from '../addFiles/AddFiles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
-import { fetchFiles, deleteFile, renameFile  } from '../../../redux/filesActions';
+import { fetchFiles, deleteFile, changeFile  } from '../../../redux/filesActions';
 
 import './filelist.css'
 
@@ -18,6 +18,7 @@ const FilesList = () => {
   const error = useSelector((state) => state.files.error);
 
   const [newFileName, setNewFileName] = useState('');
+  const [newDescription, setNewDescription] = useState('');
   const [editingFileId, setEditingFileId] = useState(null);
 
   useEffect(() => {
@@ -36,20 +37,34 @@ const FilesList = () => {
     dispatch(deleteFile(fileId));
   };
 
-
-  const handleNameChange = (fileId) => {
-    if (newFileName.trim() !== '') {
-      dispatch(renameFile(fileId, newFileName));
+  
+  // Function to handle file update
+  const handleFileUpdate = (fileId) => {
+    if (newFileName.trim() !== '' || newDescription.trim() !== '') {
+      dispatch(changeFile(fileId, newFileName, newDescription));
       setNewFileName('');
+      setNewDescription('');
       setEditingFileId(null);
     }
   };
 
-  const handleEditClick = (fileId, currentName) => {
+  const handleEditClick = (fileId, currentName, currentDescription) => {
     setEditingFileId(fileId);
     setNewFileName(currentName);
+    setNewDescription(currentDescription);
   };
 
+
+  // Function to format date
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${year}-${month}-${day} ${hours}:${minutes}`;
+  };
 
   return (
     <div className="files-list">
@@ -65,29 +80,35 @@ const FilesList = () => {
                 onClick={() => handleDelete(file.id)}
               />
 
-                {editingFileId === file.id ? (
-                <>
+              {/* Edit file name and description */}
+              {editingFileId === file.id ? (
+              <div className="edit-form">
                 <input
                   type="text"
                   value={newFileName}
+                  placeholder="New file name"
                   onChange={(e) => setNewFileName(e.target.value)}
                 />
-                
-                <button onClick={() => handleNameChange(file.id)}> Save </button>
-                </>
-                ) : (
-                <div className="file-description">File Name: {file.filename}{' '}
-                  <button onClick={() => handleEditClick(file.id, file.filename)}> Edit </button>
+                <textarea
+                  value={newDescription || ''} // Default to empty string if null
+                  placeholder="New description"
+                  onChange={(e) => setNewDescription(e.target.value)}
+                />
+                <button onClick={() => handleFileUpdate(file.id)}>Save</button>
+              </div>
+            ) : (
+              <>
+                <div className="file-description">File Name: {file.filename} {' '}
+                  <button onClick={() => handleEditClick(file.id, file.filename, file.description)}>Edit</button>
                 </div>
-                )}
+                <div className="file-description">File Description: {file.description}</div>
+              </>
+            )}
 
-              <div className="file-description">File Size: {file.filesize} bytes</div>
-              <div className="file-description">File Loaded: {file.load_date}</div>
+              <div className="file-description">File Type: {file.file_type}</div>
+              <div className="file-description">File Size: {file.filesize} Mb</div>
+              <div className="file-description">File Loaded: {formatDate(file.load_date)}</div>
               <div className="file-description">File Link: {file.external_download_link}</div>
-
-              {/* <button className="delete-button" onClick={() => handleDelete(file.id)}>
-                  Delete
-              </button> */}
 
               <FontAwesomeIcon icon={faTimes} className="delete-icon" onClick={() => handleDelete(file.id)}/>
 
