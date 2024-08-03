@@ -5,32 +5,79 @@ import apiUrl from './apiConfig'
 
 export const checkToken = async (navigate) => {
   /**
-   * Asynchronously checks the validity of the authorization token stored in localStorage.
-   * If the token is missing, undefined, or invalid, the user is redirected to the login page.
-   *
-   * @param {function} navigate - The navigation function to redirect the user.
-   * @returns {Promise<{isValid: boolean, error?: string}>} - An object indicating whether the token is valid and any error message if applicable.
-   *
+   * Asynchronously checks the validity of the authorization token stored in localStorage
    */
+
   try {
     const token = localStorage.getItem('authorization');
+    console.log('Authorization token:', token);
 
-    if (token === 'undefined') {
-      console.log('----token is undefined---');
+    if (!token || token === 'undefined') {
+      console.log('Token is undefined or missing');
       navigate('/login');
       return { isValid: false };
     }
 
-    if (!token) {
-      console.log('----undef---1--')
+    const response = await fetch(`${apiUrl}/api/token/verify/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ token }),
+    });
+
+    if (!response.ok) {
+      const responseData = await response.json();
+      console.log('Token verification response:', responseData);
+      
+      // Check for invalid token response
+      if (responseData.detail === 'Token is invalid or expired' || responseData.code === 'token_not_valid') {
+        navigate('/login');
+        return { isValid: false };
+      }
+      
+      // Handle other possible errors
       navigate('/login');
+      return { isValid: false, error: responseData.detail || 'Token verification failed' };
     }
+
+    // Token is valid
+    return { isValid: true };
 
   } catch (error) {
     console.error('Error during token verification:', error);
+    navigate('/login'); // Redirect to login on error
     return { isValid: false, error: 'An unexpected error occurred during token verification.' };
   }
 };
+
+
+// export const checkToken = async (navigate) => {
+//   /**
+//    * Asynchronously checks the validity of the authorization token stored in localStorage.
+
+//    */
+//   try {
+//     const token = localStorage.getItem('authorization');
+//     console.log(token)
+//     console.log('-----TOKEN----')
+//     if (token === 'undefined') {
+//       console.log('----token is undefined---');
+//       navigate('/login');
+//       return { isValid: false };
+//     }
+
+//     if (!token) {
+//       console.log('----undef---1--')
+//       navigate('/login');
+//     }
+
+//   } catch (error) {
+//     console.error('Error during token verification:', error);
+//     return { isValid: false, error: 'An unexpected error occurred during token verification.' };
+//   }
+// };
 
 
 
@@ -93,9 +140,8 @@ export const registerUser = async (formData) => {
       });
   
       if (!response.ok) {
-        console.log('---json1----')
         const errorData = await response.json();
-        console.log('---json2----')
+
         if (errorData.error) {
           return { success: false, error: errorData.error };
         } else {
@@ -181,7 +227,6 @@ export const accountinfo = async () => {
 
     try {
       const token = localStorage.getItem('authorization')
-      console.log('---accountinfo----')
 
       const response = await fetch(`${apiUrl}/api/data-user/`, {
           method: 'GET',

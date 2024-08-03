@@ -5,9 +5,9 @@ import FileUpload from '../addFiles/AddFiles';
 
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faLink } from '@fortawesome/free-solid-svg-icons';
 
-import { fetchFiles, deleteFile, changeFile  } from '../../../redux/filesActions';
+import { fetchFiles, deleteFile, changeFile, copyLinkFile, changeLinkSecurity  } from '../../../redux/filesActions';
 
 import './filelist.css'
 
@@ -37,7 +37,7 @@ const FilesList = () => {
     dispatch(deleteFile(fileId));
   };
 
-  
+
   // Function to handle file update
   const handleFileUpdate = (fileId) => {
     if (newFileName.trim() !== '' || newDescription.trim() !== '') {
@@ -54,6 +54,9 @@ const FilesList = () => {
     setNewDescription(currentDescription);
   };
 
+  const handleCopyLink = (fileId) => {
+    dispatch(copyLinkFile(fileId));
+  };
 
   // Function to format date
   const formatDate = (dateString) => {
@@ -108,8 +111,16 @@ const FilesList = () => {
               <div className="file-description">File Type: {file.file_type}</div>
               <div className="file-description">File Size: {file.filesize} Mb</div>
               <div className="file-description">File Loaded: {formatDate(file.load_date)}</div>
-              <div className="file-description">File Link: {file.external_download_link}</div>
+              <div className="file-description">Total downloads: {file.total_downloads} </div>
 
+            {/* Add Copy Link Button */}
+            <div className="file-description">
+              <button onClick={() => handleCopyLink(file.id)} className="copy-link-button">
+                <FontAwesomeIcon icon={faLink} /> Copy Link
+              </button>
+            </div>
+
+            {/* Add Delete Button */}
               <FontAwesomeIcon icon={faTimes} className="delete-icon" onClick={() => handleDelete(file.id)}/>
 
             </div>

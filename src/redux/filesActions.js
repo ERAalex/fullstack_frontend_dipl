@@ -191,12 +191,12 @@ export const deleteFile = (fileId) => {
   };
 };
 
-export const shareFile = (fileId) => {
+export const copyLinkFile = (fileId) => {
   return async(dispatch) => {
     try {
       const token = localStorage.getItem('authorization');
-      const response = await fetch(`${apiUrl}/api/files/share/${fileId}`, {
-        method: 'POST',
+      const response = await fetch(`${apiUrl}/files/generate-external-link/${fileId}`, {
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': token,
@@ -206,11 +206,33 @@ export const shareFile = (fileId) => {
         throw new Error(`Error generating special link: ${response.statusText}`);
       }
       const result = await response.json();
-      const specialLink = result.special_link;
-      alert(`Специальная ссылка для скачивания: ${specialLink}`);
+      const link = result.link;
+      alert(`Специальная ссылка для скачивания: ${link}`);
     } catch (error) {
       console.error('Error sharing file:', error.message);
     }
   }
 }
+
+export const changeLinkSecurity = (fileId) => {
+  return async(dispatch) => {
+    try {
+      const token = localStorage.getItem('authorization');
+      const response = await fetch(`${apiUrl}/change-security-link/${fileId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token,
+          },
+        })
+      if (!response.ok) {
+        throw new Error(`Error generating special link: ${response.statusText}`);
+      }
+      alert(`Специальная ссылка изменена`);
+    } catch (error) {
+      console.error('Error sharing file:', error.message);
+    }
+  }
+}
+
 

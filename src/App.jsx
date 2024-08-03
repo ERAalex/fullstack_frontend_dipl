@@ -7,7 +7,7 @@ import Registration from './components/login/RegistrationForm'
 
 import FileStore from './components/files/filestore/Filestore'
 import AddFiles from './components/files/addFiles/AddFiles'
-
+import ProtectedRoute from './components/ProtectedRoute';
 
 import store from './redux/store'; // Import the Redux store
 import { Provider } from 'react-redux';
@@ -21,7 +21,7 @@ function App() {
         <Routes>
           <Route path="/registration" element={<Registration />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/files" element={<FileStore />} />
+          <Route path="/files" element={<ProtectedRoute element={<FileStore />} />} />
           <Route path="/" element={<HomePage />} />
 
         </Routes>
