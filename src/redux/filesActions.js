@@ -218,7 +218,7 @@ export const changeLinkSecurity = (fileId) => {
   return async(dispatch) => {
     try {
       const token = localStorage.getItem('authorization');
-      const response = await fetch(`${apiUrl}/change-security-link/${fileId}`, {
+      const response = await fetch(`${apiUrl}/files/change-security-link/${fileId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

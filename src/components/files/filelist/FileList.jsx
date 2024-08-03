@@ -5,7 +5,7 @@ import FileUpload from '../addFiles/AddFiles';
 
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes, faLink } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faLink, faLock } from '@fortawesome/free-solid-svg-icons';
 
 import { fetchFiles, deleteFile, changeFile, copyLinkFile, changeLinkSecurity  } from '../../../redux/filesActions';
 
@@ -56,6 +56,10 @@ const FilesList = () => {
 
   const handleCopyLink = (fileId) => {
     dispatch(copyLinkFile(fileId));
+  };
+
+  const handleChangeLinkSecurity = (fileId) => {
+    dispatch(changeLinkSecurity(fileId));
   };
 
   // Function to format date
@@ -117,6 +121,13 @@ const FilesList = () => {
             <div className="file-description">
               <button onClick={() => handleCopyLink(file.id)} className="copy-link-button">
                 <FontAwesomeIcon icon={faLink} /> Copy Link
+              </button>
+            </div>
+
+            {/* Add Change Link Security Button */}
+            <div className="file-description">
+              <button onClick={() => handleChangeLinkSecurity(file.id)} className="change-link-security-button">
+                <FontAwesomeIcon icon={faLock} style={{ color: 'green' }} /> Change Link Security
               </button>
             </div>
 
