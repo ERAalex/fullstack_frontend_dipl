@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import FileUpload from '../addFiles/AddFiles';
+// import FileUpload from '../addFiles/AddFiles';
+import AddFiles from '../addFiles/AddFiles';
 
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -138,7 +139,7 @@ const FilesList = () => {
         ))
       )}
 
-      <FileUpload />
+      <AddFiles />
     </div>
   );
 };
