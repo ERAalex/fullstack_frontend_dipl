@@ -19,7 +19,6 @@ export const checkToken = async (navigate) => {
 
     if (!token || token === 'undefined') {
       console.log('Token is undefined or missing');
-      navigate('/login');
       return { isValid: false };
     }
 
@@ -58,13 +57,11 @@ export const checkToken = async (navigate) => {
 };
 
 
-
-
 export const fetchUsers = () => {
     return async (dispatch) => {
       try {
         const token = localStorage.getItem('authorization');
-        console.log(token)
+
         const response = await fetch(`${apiUrl}/api/users/get-users`, {
           headers: {
             'Authorization': token,
@@ -153,10 +150,9 @@ export const login = async (formData) => {
       if (response.ok) {
         const userData = await response.json();
 
-        console.log(userData)
-        console.log(userData.access)
         // save token
         localStorage.setItem('authorization', `Bearer ${userData.access}`);
+        localStorage.setItem('refresh_token', `Bearer ${userData.refresh}`);
 
       // Now get information about account
       const accountDataResult = await accountinfo();
@@ -232,29 +228,40 @@ export const accountinfo = async () => {
   };
 
 
-export const logout = () => {
+  export const logout = () => {
     return async (dispatch) => {
       try {
-        const token = localStorage.getItem('authorization');
+        const token = localStorage.getItem('authorization'); // Access token
+        const refreshToken = localStorage.getItem('refresh_token'); // Refresh token
   
-        const response = await fetch(`${apiUrl}/api/users/logout`, {
-          method: 'GET',
+        // Ensure both tokens are available
+        if (!token || !refreshToken) {
+          throw new Error('Authorization or refresh token missing');
+        }
+  
+        const response = await fetch(`${apiUrl}/api/logout`, {
+          method: 'POST',
           headers: {
             'Authorization': token,
+            'Content-Type': 'application/json', // Send JSON data
           },
+          body: JSON.stringify({ refresh: refreshToken }), // Send refresh token in body
         });
   
         if (!response.ok) {
-          throw new Error(`Error logging out: ${response.statusText}`);
+          console.error(`Error logging out: ${response.statusText}`);
         }
-  
+        
         dispatch({ type: 'LOGOUT_SUCCESS' });
         localStorage.removeItem('authorization');
+        localStorage.removeItem('refresh_token'); // Also remove refresh token
+
       } catch (error) {
         console.error('Error logging out:', error.message);
       }
     };
   };
+
 
 export const deleteUser = (userId) => {
   return async (dispatch) => {

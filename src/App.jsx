@@ -6,8 +6,8 @@ import Login from './components/login/Login';
 import Registration from './components/login/RegistrationForm'
 
 import FileStore from './components/files/filestore/Filestore'
-import AddFiles from './components/files/addFiles/AddFiles'
 import ProtectedRoute from './components/ProtectedRoute';
+import Header from './components/header/Header';
 
 import store from './redux/store'; // Import the Redux store
 import { Provider } from 'react-redux';
@@ -17,15 +17,17 @@ function App() {
   return (
     <Provider store={store}>
     <Router>
-      <div>
+      <div className="app-container">
+        <Header />
+        <div className="content">
         <Routes>
           <Route path="/registration" element={<Registration />} />
           <Route path="/login" element={<Login />} />
           <Route path="/files" element={<ProtectedRoute><FileStore /></ProtectedRoute>} />
           {/* <Route path="/files" element={<FileStore />}/> */}
           <Route path="/" element={<HomePage />} />
-
         </Routes>
+        </div>
       </div>
     </Router>
     </Provider>

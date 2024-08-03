@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { checkToken } from '../redux/usersActions'; // Adjust the path as necessary
+import { checkToken } from '../redux/usersActions'; 
 
 
 // This component protects routes that require authentication
@@ -14,6 +14,8 @@ const ProtectedRoute = ({ children }) => {
      * verification check and conditionally renders the protected content based on the authentication status.
      * 
   */
+
+  console.log('----LOGOUT_--')
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -37,6 +39,7 @@ const ProtectedRoute = ({ children }) => {
         return;
       } else {
         // Redirect to login page if not authorized
+        
         navigate('/login', { state: { from: location } });
       }
     }
