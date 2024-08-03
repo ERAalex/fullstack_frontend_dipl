@@ -253,19 +253,24 @@ export const deleteUser = (userId) => {
   return async (dispatch) => {
     try {
       const token = localStorage.getItem('authorization');
-      const response = await fetch(`${apiUrl}/api/users/delete/${userId}`, {
+      const response = await fetch(`${apiUrl}/api/delete-user/${userId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': token,
         },
       });
 
-      if (!response.ok) {
-        throw new Error(`Error deleting user: ${response.statusText}`);
+      // Check if the response status is 204, which means no content
+      if (response.status === 204) {
+        console.log('User deleted successfully');
+      } else {
+        // If there is content, parse it
+        const data = await response.json();
+        console.log('User deleted successfully:', data);
       }
 
-      const data = await response.json();
-      console.log('User deleted successfully:', data);
+      // const data = await response.json();
+      // console.log('User deleted successfully:', data);
       dispatch(fetchUsers());
     } catch (error) {
       console.error('User deleting file:', error.message);
