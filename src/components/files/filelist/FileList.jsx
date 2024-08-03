@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
-import { fetchFiles } from '../../../redux/filesActions';
 import { useSelector, useDispatch } from 'react-redux';
 import FileUpload from '../addFiles/AddFiles';
-import { deleteFile } from '../../../redux/filesActions';
+
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
+
+import { fetchFiles, deleteFile, renameFile  } from '../../../redux/filesActions';
 
 import './filelist.css'
 
@@ -15,6 +16,9 @@ const FilesList = () => {
   const files = useSelector((state) => state.files.files);
   const loading = useSelector((state) => state.files.loading);
   const error = useSelector((state) => state.files.error);
+
+  const [newFileName, setNewFileName] = useState('');
+  const [editingFileId, setEditingFileId] = useState(null);
 
   useEffect(() => {
       dispatch(fetchFiles());
@@ -33,6 +37,20 @@ const FilesList = () => {
   };
 
 
+  const handleNameChange = (fileId) => {
+    if (newFileName.trim() !== '') {
+      dispatch(renameFile(fileId, newFileName));
+      setNewFileName('');
+      setEditingFileId(null);
+    }
+  };
+
+  const handleEditClick = (fileId, currentName) => {
+    setEditingFileId(fileId);
+    setNewFileName(currentName);
+  };
+
+
   return (
     <div className="files-list">
       {files.length === 0 ? (
@@ -40,7 +58,29 @@ const FilesList = () => {
       ) : (
         files.map((file) => (
             <div key={file.id} className="file-item">
-              <div className="file-description">File Name: {file.filename}</div>
+
+              <FontAwesomeIcon
+                icon={faTimes}
+                className="delete-icon"
+                onClick={() => handleDelete(file.id)}
+              />
+
+                {editingFileId === file.id ? (
+                <>
+                <input
+                  type="text"
+                  value={newFileName}
+                  onChange={(e) => setNewFileName(e.target.value)}
+                />
+                
+                <button onClick={() => handleNameChange(file.id)}> Save </button>
+                </>
+                ) : (
+                <div className="file-description">File Name: {file.filename}{' '}
+                  <button onClick={() => handleEditClick(file.id, file.filename)}> Edit </button>
+                </div>
+                )}
+
               <div className="file-description">File Size: {file.filesize} bytes</div>
               <div className="file-description">File Loaded: {file.load_date}</div>
               <div className="file-description">File Link: {file.external_download_link}</div>

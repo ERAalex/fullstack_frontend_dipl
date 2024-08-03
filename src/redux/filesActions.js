@@ -121,7 +121,7 @@ export const renameFile = (fileId, newName) => {
   return async (dispatch) => {
     try {
       const token = localStorage.getItem('authorization');
-      const response = await fetch(`${apiUrl}/files/rename/${fileId}`, {
+      const response = await fetch(`${apiUrl}/files/rename-file/${fileId}`, {
         method: 'PATCH',
         headers: {
           'Authorization': token,
@@ -183,7 +183,7 @@ export const deleteFile = (fileId) => {
       if (!response.ok) {
         throw new Error(`Error deleting file: ${response.statusText}`);
       }
-      
+
       dispatch(fetchFiles());
     } catch (error) {
       console.error('Error deleting file:', error.message);
