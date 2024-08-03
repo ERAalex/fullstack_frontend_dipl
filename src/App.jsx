@@ -21,7 +21,8 @@ function App() {
         <Routes>
           <Route path="/registration" element={<Registration />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/files" element={<ProtectedRoute element={<FileStore />} />} />
+          <Route path="/files" element={<ProtectedRoute><FileStore /></ProtectedRoute>} />
+          {/* <Route path="/files" element={<FileStore />}/> */}
           <Route path="/" element={<HomePage />} />
 
         </Routes>

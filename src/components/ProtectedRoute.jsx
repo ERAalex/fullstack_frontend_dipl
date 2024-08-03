@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Navigate } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { checkToken } from '../redux/usersActions'; // Adjust the path as necessary
 
 
 // This component protects routes that require authentication
-const ProtectedRoute = () => {
-  /**
+const ProtectedRoute = ({ children }) => {
+    /**
      * `ProtectedRoute` Component
      *
      * Purpose:
@@ -17,6 +16,7 @@ const ProtectedRoute = () => {
   */
 
   const navigate = useNavigate();
+  const location = useLocation();
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthorized, setIsAuthorized] = useState(false);
 
@@ -30,12 +30,23 @@ const ProtectedRoute = () => {
     verifyToken();
   }, [navigate]);
 
+  useEffect(() => {
+    if (!isLoading) {
+      if (isAuthorized) {
+        // Render the children or `Outlet` if authorized
+        return;
+      } else {
+        // Redirect to login page if not authorized
+        navigate('/login', { state: { from: location } });
+      }
+    }
+  }, [isLoading, isAuthorized, navigate, location]);
+
   if (isLoading) {
     return <div>Loading...</div>; // Show a loading spinner or message while verifying the token
   }
 
-  return isAuthorized ? <Outlet /> : null; // Render the outlet if authorized, otherwise render nothing
+  return isAuthorized ? children : null; // Render children if authorized, otherwise render nothing
 };
-
 
 export default ProtectedRoute;

@@ -9,8 +9,13 @@ export const checkToken = async (navigate) => {
    */
 
   try {
-    const token = localStorage.getItem('authorization');
+    let token = localStorage.getItem('authorization');
     console.log('Authorization token:', token);
+
+    // Remove 'Bearer ' prefix if present
+    if (token && token.startsWith('Bearer ')) {
+        token = token.substring(7);
+    }
 
     if (!token || token === 'undefined') {
       console.log('Token is undefined or missing');
@@ -52,32 +57,6 @@ export const checkToken = async (navigate) => {
   }
 };
 
-
-// export const checkToken = async (navigate) => {
-//   /**
-//    * Asynchronously checks the validity of the authorization token stored in localStorage.
-
-//    */
-//   try {
-//     const token = localStorage.getItem('authorization');
-//     console.log(token)
-//     console.log('-----TOKEN----')
-//     if (token === 'undefined') {
-//       console.log('----token is undefined---');
-//       navigate('/login');
-//       return { isValid: false };
-//     }
-
-//     if (!token) {
-//       console.log('----undef---1--')
-//       navigate('/login');
-//     }
-
-//   } catch (error) {
-//     console.error('Error during token verification:', error);
-//     return { isValid: false, error: 'An unexpected error occurred during token verification.' };
-//   }
-// };
 
 
 
