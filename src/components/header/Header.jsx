@@ -12,6 +12,11 @@ const Header = () => {
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Retrieve 'isAdmin' from localStorage and convert it to a boolean
+  const isAdmin = localStorage.getItem('isAdmin') === 'true'; // Ensure this is a boolean comparison
+  console.log('----admin----se---')
+  console.log(isAdmin);
+
   useEffect(() => {
     const verifyToken = async () => {
       const { isValid } = await checkToken(navigate);
@@ -39,6 +44,7 @@ const Header = () => {
         {isAuthorized ? (
           <>
             <Link to="/files">Files</Link>
+            {isAdmin && <Link to="/UsersList">See all Users</Link>}
             <button onClick={handleLogout}>Logout</button>
           </>
         ) : (

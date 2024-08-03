@@ -61,7 +61,7 @@ export const fetchUsers = () => {
       try {
         const token = localStorage.getItem('authorization');
 
-        const response = await fetch(`${apiUrl}/api/users/get-users`, {
+        const response = await fetch(`${apiUrl}/api/users/`, {
           headers: {
             'Authorization': token,
           },
@@ -72,15 +72,13 @@ export const fetchUsers = () => {
         }
         
         const data = await response.json();
-        console.log('Fetched data:', data)
+
         dispatch(fetchUsersSuccess(data));
       } catch (error) {
         dispatch(fetchUsersFailure(error.message));
       }
     };
   };
-
-
 
 
 export const registerUser = async (formData) => {
@@ -145,7 +143,7 @@ export const login = async (formData) => {
         body: JSON.stringify(formData),
         credentials: 'include',
       });
-  
+      
       if (response.ok) {
         const userData = await response.json();
 
@@ -173,20 +171,6 @@ export const login = async (formData) => {
 };
 
 
-  //       localStorage.setItem('currentuser', userData.currentuser);
-  //       localStorage.setItem('isAdmin', userData.isAdmin)
-  //       return { success: true };
-  //     } else {
-  //       const errorData = await response.json();
-  //       return { success: false, error: errorData.error };
-  //     }
-  //   } catch (error) {
-  //     console.error('Error during login:', error);
-  //     return { success: false, error: 'An unexpected error occurred during login.' };
-  //   }
-  // };
-  //
-
 export const accountinfo = async () => {
     /**
    * Fetches the account information of the currently authenticated user.
@@ -211,10 +195,10 @@ export const accountinfo = async () => {
 
       if (response.ok) {
         const userData = await response.json();
-
+        
         // now get information about account
         localStorage.setItem('userId', userData.id);
-        localStorage.setItem('isAdmin', userData.isAdmin)
+        localStorage.setItem('isAdmin', userData.is_admin)
         return { success: true };
       } else {
         const errorData = await response.json();
@@ -254,6 +238,7 @@ export const accountinfo = async () => {
         dispatch({ type: 'LOGOUT_SUCCESS' });
         localStorage.removeItem('authorization');
         localStorage.removeItem('refresh_token'); // Also remove refresh token
+        localStorage.removeItem('isAdmin'); 
         
         // Redirect to the main page or login page
         navigate('/');
