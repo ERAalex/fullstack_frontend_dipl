@@ -23,7 +23,7 @@ const Header = () => {
   }, [navigate]);
 
   const handleLogout = () => {
-    dispatch(logout());
+    dispatch(logout(navigate));
     setIsAuthorized(false);
     navigate('/login'); // Redirect to login page after logout
   };

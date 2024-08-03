@@ -2,7 +2,6 @@ import { fetchUsersSuccess, fetchUsersFailure } from './usersReducers';
 import apiUrl from './apiConfig'
 
 
-
 export const checkToken = async (navigate) => {
   /**
    * Asynchronously checks the validity of the authorization token stored in localStorage
@@ -228,12 +227,12 @@ export const accountinfo = async () => {
   };
 
 
-  export const logout = () => {
+  export const logout = (navigate) => {
     return async (dispatch) => {
       try {
         const token = localStorage.getItem('authorization'); // Access token
         const refreshToken = localStorage.getItem('refresh_token'); // Refresh token
-  
+
         // Ensure both tokens are available
         if (!token || !refreshToken) {
           throw new Error('Authorization or refresh token missing');
@@ -255,7 +254,9 @@ export const accountinfo = async () => {
         dispatch({ type: 'LOGOUT_SUCCESS' });
         localStorage.removeItem('authorization');
         localStorage.removeItem('refresh_token'); // Also remove refresh token
-
+        
+        // Redirect to the main page or login page
+        navigate('/');
       } catch (error) {
         console.error('Error logging out:', error.message);
       }

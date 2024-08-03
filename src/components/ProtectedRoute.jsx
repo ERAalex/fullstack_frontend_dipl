@@ -15,8 +15,6 @@ const ProtectedRoute = ({ children }) => {
      * 
   */
 
-  console.log('----LOGOUT_--')
-
   const navigate = useNavigate();
   const location = useLocation();
   const [isLoading, setIsLoading] = useState(true);
