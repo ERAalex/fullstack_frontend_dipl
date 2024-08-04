@@ -8,7 +8,7 @@ import AddFiles from '../addFiles/AddFiles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faLink, faLock } from '@fortawesome/free-solid-svg-icons';
 
-import { fetchFiles, deleteFile, changeFile, copyLinkFile, changeLinkSecurity  } from '../../../redux/filesActions';
+import { fetchFiles, deleteFile, downloadFile, changeFile, copyLinkFile, changeLinkSecurity  } from '../../../redux/filesActions';
 
 import './filelist.css'
 
@@ -49,6 +49,8 @@ const FilesList = () => {
     }
   };
 
+
+  // Edit file logic
   const handleEditClick = (fileId, currentName, currentDescription) => {
     setEditingFileId(fileId);
     setNewFileName(currentName);
@@ -59,8 +61,14 @@ const FilesList = () => {
     dispatch(copyLinkFile(fileId));
   };
 
+  // Create new UUID
   const handleChangeLinkSecurity = (fileId) => {
     dispatch(changeLinkSecurity(fileId));
+  };
+
+  // Download file
+  const handleDownloadClick = (fileId, fileName, fileType) => {
+    dispatch(downloadFile(fileId, fileName, fileType));
   };
 
   // Function to format date
@@ -108,6 +116,7 @@ const FilesList = () => {
               <>
                 <div className="file-description">File Name: {file.filename} {' '}
                   <button onClick={() => handleEditClick(file.id, file.filename, file.description)}>Edit</button>
+                  <button onClick={() => handleDownloadClick(file.id, file.filename, file.file_type)}>Download</button>
                 </div>
                 <div className="file-description">File Description: {file.description}</div>
               </>

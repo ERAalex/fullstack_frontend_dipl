@@ -98,54 +98,51 @@ export const uploadFile = (formData) => {
   };
   
 
+// Function to handle file download
+export const downloadFile = (fileId, fileName, fileType) => {
+  return async (dispatch) => {
+    try {
+      const token = localStorage.getItem('authorization');
+      const response = await fetch(`${apiUrl}/files/download-file/${fileId}/`, {
+        method: 'GET',
+        headers: {
+          'Authorization': token,
+        },
+      });
 
-  export const downloadFile = (fileId) => {
-    return async (dispatch) => {
-      try {
-        const token = localStorage.getItem('authorization');
-        const response = await fetch(`${apiUrl}/files/download/${fileId}`, {
-          method: 'GET',
-          headers: {
-            'Authorization': token,
-          },
-        });
+      if (!response.ok) {
+        throw new Error('Failed to download file');
+      }
   
-        if (!response.ok) {
-          throw new Error(`Error downloading file: ${response.statusText}`);
-        }
-        const blob = await response.blob();
-
-        const contentDispositionHeader = response.headers.get('Content-Disposition');
-        let filename;
-
-        if (contentDispositionHeader) {
-          if (contentDispositionHeader.includes('=?utf-8?b?')) {
-            const base64Encoded = contentDispositionHeader.split('=?utf-8?b?')[1].split('?=')[0];
-            const contentDispositionHeaderDecode = new TextDecoder().decode(new Uint8Array(atob(base64Encoded).split('').map(c => c.charCodeAt(0))));;
-            filename = contentDispositionHeaderDecode.split(';')[1].trim().replace('filename=', '');
-          } else {
-            filename = contentDispositionHeader.split(';')[1].trim().replace('filename=', '');
-          }
-        } else {
-          filename = 'fallback_filename';
-          console.warn('Content-Disposition header is missing. Using fallback filename.');
-        }
-         
-        const link = document.createElement('a');
-        link.href = window.URL.createObjectURL(blob);
-        link.download = filename;
-          
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        
-        } catch (error) {
-        console.error('Error downloading file:', error.message);
-        }
-      console.log('File download successfully') 
-      };
-      };
+      // Create a Blob from the response
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
   
+      // Use the provided fileName and fileType, or fallback to default values
+      const downloadFileName = fileName + '.' + fileType || 'downloaded-file';
+
+      // Create a link element to trigger the download
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = downloadFileName;
+      document.body.appendChild(link);
+      link.click();
+  
+      // Cleanup
+      link.remove();
+      window.URL.revokeObjectURL(url);
+  
+      // Dispatch success action if needed
+      dispatch({ type: 'DOWNLOAD_SUCCESS', fileId });
+    } catch (error) {
+      console.error('Error during file download:', error);
+      dispatch({ type: 'DOWNLOAD_FAILURE', error: error.message });
+    }
+  };
+};
+
+
+// Function to change data of file
 export const changeFile = (fileId, newName, newDescription) => {
   return async (dispatch) => {
     try {
