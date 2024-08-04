@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../../redux/usersActions';
 import { loginSuccess } from '../../redux/usersReducers';
+import { setUserData } from '../../store/auth/authReducer';
+
 import { useDispatch } from 'react-redux'
 
 import './LoginForm.css';
@@ -27,6 +29,9 @@ const LoginForm = () => {
 
     const loginResult = await login(formData);
 
+    if (loginResult.success) {
+      dispatch(setUserData(loginResult.data));} // Dispatch the user data
+      
     if (loginResult.success) {
       console.log('Login successfully');
       if (loginResult.isAdmin) {

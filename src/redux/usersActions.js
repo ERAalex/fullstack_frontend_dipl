@@ -1,4 +1,6 @@
 import { fetchUsersSuccess, fetchUsersFailure } from './usersReducers';
+// import { accountInfoSuccess } from '../store/auth/authReducer';
+import { setLogout, setUserData } from '../store/auth/authReducer';
 import apiUrl from './apiConfig'
 
 
@@ -36,12 +38,10 @@ export const checkToken = async (navigate) => {
       
       // Check for invalid token response
       if (responseData.detail === 'Token is invalid or expired' || responseData.code === 'token_not_valid') {
-        navigate('/login');
         return { isValid: false };
       }
       
       // Handle other possible errors
-      navigate('/login');
       return { isValid: false, error: responseData.detail || 'Token verification failed' };
     }
 
@@ -130,6 +130,7 @@ export const registerUser = async (formData) => {
   };
 
 
+  // * LOGIN PART * //
 
 export const login = async (formData) => {
     try {
@@ -155,7 +156,8 @@ export const login = async (formData) => {
 
       // proceed and return True to pass to /files
       if (accountDataResult.success) {
-        return { success: true };
+        
+        return { success: true, data: accountDataResult.data };
       } else {
         return { success: false, error: accountDataResult.error };
       }
@@ -172,13 +174,6 @@ export const login = async (formData) => {
 
 export const accountinfo = async () => {
     /**
-   * Fetches the account information of the currently authenticated user.
-   *
-   * This function sends a GET request to the `/api/data-user/` endpoint to retrieve
-   * the user's account information. The request includes the authorization token
-   * stored in localStorage.
-   *
-   * @async
    * this method is used in 'login'
    */
 
@@ -198,7 +193,7 @@ export const accountinfo = async () => {
         // now get information about account
         localStorage.setItem('userId', userData.id);
         localStorage.setItem('isAdmin', userData.is_admin)
-        return { success: true };
+        return { success: true, data: userData };
       } else {
         const errorData = await response.json();
         return { success: false, error: errorData.error };
@@ -234,7 +229,10 @@ export const accountinfo = async () => {
           console.error(`Error logging out: ${response.statusText}`);
         }
         
-        dispatch({ type: 'LOGOUT_SUCCESS' });
+        console.log('-----LOGOUT-----')
+        // dispatch({ type: 'LOGOUT_SUCCESS' });
+        dispatch(setLogout());
+
         localStorage.removeItem('authorization');
         localStorage.removeItem('refresh_token'); // Also remove refresh token
         localStorage.removeItem('isAdmin'); 
@@ -281,7 +279,7 @@ export const changeStatus = (userId) => {
   return async (dispatch) => {
     try {
       const token = localStorage.getItem('authorization');
-      const response = await fetch(`${apiUrl}/api/users/status/${userId}`, {
+      const response = await fetch(`${apiUrl}/api/change-user-status/${userId}`, {
         method: 'PATCH',
         headers: {
           'Authorization': token,

@@ -1,11 +1,13 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import filesReducers from './filesReducers';
 import userReducers from './usersReducers';
-import { thunk } from 'redux-thunk'; // Use named import for redux-thunk
-import logger from 'redux-logger'; // Make sure to install redux-logger if you haven't already
+import authReducer from '../store/auth/authReducer';
+import { thunk } from 'redux-thunk'; 
+import logger from 'redux-logger'; 
 
 // Combine reducers
 const rootReducer = combineReducers({
+  auth: authReducer,
   files: filesReducers,
   user: userReducers,
 });

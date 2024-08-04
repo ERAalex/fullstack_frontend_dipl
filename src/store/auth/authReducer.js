@@ -7,10 +7,13 @@ const username = cookies.get('username');
 const isAdmin = cookies.get('isAdmin');
 const email = cookies.get('email');
 const userId = cookies.get('userId');
+const userIdData = cookies.get('userIdData');
+
 
 const initialState = {
   isLogined: refresh?true:false,
   isAdmin: isAdmin?isAdmin:false,
+  userIdData: userIdData?userIdData:0,
   storageId: null,
   storageName: null,
   tokenData: {
@@ -27,6 +30,7 @@ export const authReducer = createSlice({
   name: 'auth',
   initialState,
   reducers: {
+
     updateTokensData: (state, action) => {
       return {
         ...state,
@@ -36,17 +40,20 @@ export const authReducer = createSlice({
         }
       }
     },
+
     setUserData: (state, action) => {
+      console.log('-----setUserData-----')
       return {
         ...state,
-        isAdmin: action.payload.isAdmin,
+        isAdmin: action.payload.is_admin,
         userData: {
           username: action.payload.username,
           email: action.payload.email,
-          userId: action.payload.userId,
+          userId: action.payload.id,
         }
       }
     },
+
     setStorageId: (state, action) => {
       return ({
         ...state,
@@ -54,6 +61,7 @@ export const authReducer = createSlice({
         storageName: action.payload.username
       })
     },
+
     setLogout: () => {
       cookies.remove('refresh');
       cookies.remove('username');
@@ -64,9 +72,24 @@ export const authReducer = createSlice({
         ...initialState,
         isLogined: false
       });
-    }
+    },
+
+    loginSuccess: (state, action) => {
+      return {
+        ...state,
+        isLogined: true,
+        isAdmin: action.payload.isAdmin
+      }
+    },
+    
+    accountInfoSuccess : (state, action) => {
+      console.log('-----successs-----')
+      state.isLogined = true;
+      state.isAdmin = action.payload.isAdmin; 
+      state.userIdData = action.payload.id; 
+    },
   }
 })
 
-export const { updateTokensData, setUserData, setLogout, setStorageId } = authReducer.actions
+export const { accountInfoSuccess, loginSuccess, setUserData, setLogout, setStorageId } = authReducer.actions
 export default authReducer.reducer;

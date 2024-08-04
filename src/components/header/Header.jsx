@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { logout } from '../../redux/usersActions';
 import { checkToken } from '../../redux/usersActions'; 
@@ -11,6 +11,11 @@ const Header = () => {
   const dispatch = useDispatch();
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+
+  console.log('----HEADER CURRENT USER CHECK----')
+  const currentUserId = useSelector((state) => state.auth); // Use optional chaining to safely access userId
+  console.log(currentUserId)
+
 
   // Retrieve 'isAdmin' from localStorage and convert it to a boolean
   const isAdmin = localStorage.getItem('isAdmin') === 'true'; // Ensure this is a boolean comparison

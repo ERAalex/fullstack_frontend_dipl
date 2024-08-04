@@ -3,12 +3,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faShieldAlt } from '@fortawesome/free-solid-svg-icons';
 
-import { fetchUsers, deleteUser } from '../../redux/usersActions';
+import { fetchUsers, deleteUser, changeStatus } from '../../redux/usersActions';
 import { fetchAllUsersFiles } from '../../redux/filesActions';
 import ConfirmationModal from './modal_confirmation/ModalConfirmation';
 import {parseFileSize} from '../utils';
 import './usersList.css';
 
+import { Cookies } from "react-cookie";
+const cookies = new Cookies();
 
 const UsersList = () => {
   const dispatch = useDispatch();
@@ -18,6 +20,10 @@ const UsersList = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [userIdToDelete, setUserIdToDelete] = useState(null);
   const [files, setFiles] = useState([]);
+
+  const currentUserId = useSelector((state) => state.auth.userData?.userId); // Use optional chaining to safely access userId
+  console.log(currentUserId)
+
 
   useEffect(() => {
     const loadUsersAndFiles = async () => {
@@ -48,6 +54,11 @@ const UsersList = () => {
     setUserIdToDelete(null);
     setModalVisible(false);
   };
+
+  const handleAdminStatusToggle = (userId) => { // change status
+    dispatch(changeStatus(userId));
+  };
+
 
   const getUserFilesInfo = (userId) => {
     if (!Array.isArray(files)) {
@@ -94,13 +105,17 @@ const UsersList = () => {
                 <td>{count}</td>
                 <td>{totalSize}</td>
                 <td>{user.email}</td>
-                <td>
-                  {user.is_staff ? (
-                    <FontAwesomeIcon icon={faShieldAlt} title="Admin" className="admin-icon" />
-                  ) : (
-                    'No'
-                  )}
-                </td>
+                <td
+                    onClick={() => handleAdminStatusToggle(user.id)}
+                    style={{ cursor: 'pointer' }}
+                    title="Click to toggle admin status"
+                  >
+                    {user.is_staff ? (
+                      <FontAwesomeIcon icon={faShieldAlt} title="Admin" className="admin-icon" />
+                    ) : (
+                      'No'
+                    )}
+                  </td>
                 
                 <td className="delete-cell">
                   <FontAwesomeIcon
