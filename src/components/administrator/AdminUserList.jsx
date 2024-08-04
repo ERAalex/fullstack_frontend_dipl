@@ -22,6 +22,8 @@ const UsersList = () => {
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const [notificationVisible, setNotificationVisible] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState("");
+
   const [userIdToDelete, setUserIdToDelete] = useState(null);
   const [files, setFiles] = useState([]);
 
@@ -44,6 +46,11 @@ const UsersList = () => {
 
   // Delete logic for modal
   const handleDeleteRequest = (userId) => {
+    if (userId === currentUserId) {
+      setNotificationMessage("You cannot delete your own account.");
+      setNotificationVisible(true);
+      return;
+    }
     setUserIdToDelete(userId);
     setModalVisible(true);
   };
@@ -65,6 +72,7 @@ const UsersList = () => {
   // Handle admin status toggle
   const handleAdminStatusToggle = (userId) => {
     if (userId === currentUserId) {
+      setNotificationMessage("You cannot change your own admin status.");
       setNotificationVisible(true);
       return;
     }
@@ -156,7 +164,7 @@ const UsersList = () => {
       />
       <NotificationModal
         show={notificationVisible}
-        message="You cannot change your own status."
+        message={notificationMessage}
         onClose={handleNotificationClose}
       />
     </div>
