@@ -72,7 +72,6 @@ export const fetchUsers = () => {
         }
         
         const data = await response.json();
-
         dispatch(fetchUsersSuccess(data));
       } catch (error) {
         dispatch(fetchUsersFailure(error.message));

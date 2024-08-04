@@ -42,6 +42,35 @@ export const fetchFiles = (userId) => {
   };
 
 
+  export const fetchAllUsersFiles = () => {
+    return async () => {
+
+      try {
+        const token = localStorage.getItem('authorization');
+
+        let url = `${apiUrl}/files/get_all_users_files/`;
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            'Authorization': token,
+          },
+        });
+  
+        if (!response.ok) {
+          throw new Error(`Error fetching files: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        return data
+
+      } catch (error) {
+        throw new Error(`Error fetching files: ${error.message}`);
+      }
+    };
+  };
+
+
+
 export const uploadFile = (formData) => {
     return async (dispatch) => {
       try {

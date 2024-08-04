@@ -20,6 +20,7 @@ const userSlice = createSlice({
     },
     fetchUsersSuccess: (state, action) => {
       console.log('Data received in reducer:', action.payload);
+      console.log(action.payload)
       state.users = action.payload;
       state.error = null;
     },
