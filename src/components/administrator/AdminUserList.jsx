@@ -6,7 +6,10 @@ import { faTimes, faShieldAlt } from '@fortawesome/free-solid-svg-icons';
 import { fetchUsers, deleteUser, changeStatus } from '../../redux/usersActions';
 import { fetchAllUsersFiles } from '../../redux/filesActions';
 import ConfirmationModal from './modal_confirmation/ModalConfirmation';
-import {parseFileSize} from '../utils';
+
+import {parseFileSize} from '../utils-instruments/utils';
+import NotificationModal from '../utils-instruments/utils';
+
 import './usersList.css';
 
 import { Cookies } from "react-cookie";
@@ -18,10 +21,11 @@ const UsersList = () => {
 
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
+  const [notificationVisible, setNotificationVisible] = useState(false);
   const [userIdToDelete, setUserIdToDelete] = useState(null);
   const [files, setFiles] = useState([]);
 
-  const currentUserId = useSelector((state) => state.auth.userData?.userId); // Use optional chaining to safely access userId
+  const currentUserId = useSelector((state) => state.auth.userData?.userId); 
   console.log(currentUserId)
 
 
@@ -37,6 +41,8 @@ const UsersList = () => {
     loadUsersAndFiles();
   }, [dispatch]);
 
+
+  // Delete logic for modal
   const handleDeleteRequest = (userId) => {
     setUserIdToDelete(userId);
     setModalVisible(true);
@@ -55,18 +61,29 @@ const UsersList = () => {
     setModalVisible(false);
   };
 
-  const handleAdminStatusToggle = (userId) => { // change status
+
+  // Handle admin status toggle
+  const handleAdminStatusToggle = (userId) => {
+    if (userId === currentUserId) {
+      setNotificationVisible(true);
+      return;
+    }
     dispatch(changeStatus(userId));
   };
 
+  const handleNotificationClose = () => {
+    setNotificationVisible(false);
+  };
 
+
+
+  // Calculate the total size of user files -> size + total
   const getUserFilesInfo = (userId) => {
     if (!Array.isArray(files)) {
         return { count: 0, totalSize: 0 };  // Return default values if files is not an array
       }
       
     const userFiles = files.filter(file => file.user === userId);
-    // Calculate the total size of user files
     const totalSize = userFiles.reduce((acc, file) => acc + parseFileSize(file.filesize), 0);
 
     return {
@@ -78,6 +95,7 @@ const UsersList = () => {
   if (loading) {
     return <div>Loading users...</div>;
   }
+
 
   return (
     <div className="users-list-container">
@@ -135,6 +153,11 @@ const UsersList = () => {
         message="Are you sure you want to delete this user?"
         onConfirm={handleDeleteConfirm}
         onClose={handleDeleteCancel}
+      />
+      <NotificationModal
+        show={notificationVisible}
+        message="You cannot change your own status."
+        onClose={handleNotificationClose}
       />
     </div>
   );
