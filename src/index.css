@@ -67,36 +67,44 @@ button:focus-visible {
   }
 }
 
-/* Ensure full height and width for html and body */
+
 html, body {
   margin: 0;
   padding: 0;
   height: 100%;
   width: 100%;
+  overflow: hidden; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-/* Center the app-container and allow it to expand with content */
+
 .app-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  min-height: 100vh; 
-  width: 100vw;      
+  justify-content: flex-start; 
+  min-height: 100vh;
+  width: 100vw;
   box-sizing: border-box;
-  overflow: auto;    
+  overflow: hidden; 
+  padding: 20px; 
 }
 
 .content {
+  margin-top: 50px;
   width: 100%;
   max-width: 800px;
   padding: 20px;
   box-sizing: border-box;
-  overflow: auto; /* Enable scrolling if content overflows */
+  overflow-y: auto; 
+  overflow-x: hidden;
+
 }
 
 .content > * {
-  transform: scale(0.9); /* Scale content down to 90% */
-  transform-origin: top left; /* Keep scaling from the top-left corner */
-  width: 111.1%; /* Adjust width to prevent scaling issues */
+  transform: scale(0.9); 
+  transform-origin: top left; 
+  width: 111.1%; 
 }

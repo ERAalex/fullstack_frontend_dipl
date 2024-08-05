@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes, faShieldAlt } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faShieldAlt, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
 import { fetchUsers, deleteUser, changeStatus } from '../../redux/usersActions';
 import { fetchAllUsersFiles } from '../../redux/filesActions';
 import ConfirmationModal from './modal_confirmation/ModalConfirmation';
+import NotificationModal from '../utils-instruments/utils';
+
+import InformationModal from '../info/Info';
+import { adminUserListInfo } from '../info/Info';
+
 
 import {parseFileSize} from '../utils-instruments/utils';
-import NotificationModal from '../utils-instruments/utils';
 
 import './usersList.css';
 
@@ -23,6 +27,7 @@ const UsersList = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [notificationVisible, setNotificationVisible] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState("");
+  const [infoModalVisible, setInfoModalVisible] = useState(false);
 
   const [userIdToDelete, setUserIdToDelete] = useState(null);
   const [files, setFiles] = useState([]);
@@ -106,6 +111,13 @@ const UsersList = () => {
 
 
   return (
+    <div>
+      
+      {/* information modal for admin */}
+      <button className="info-button" onClick={() => setInfoModalVisible(true)}>
+        <FontAwesomeIcon icon={faInfoCircle} /> Admin Info
+      </button>
+
     <div className="users-list-container">
       {users.length === 0 ? (
         <div>No users found.</div>
@@ -167,7 +179,14 @@ const UsersList = () => {
         message={notificationMessage}
         onClose={handleNotificationClose}
       />
+      <InformationModal
+        show={infoModalVisible}
+        onClose={() => setInfoModalVisible(false)}
+        content={adminUserListInfo} 
+      />
     </div>
+
+  </div>
   );
 };
 
