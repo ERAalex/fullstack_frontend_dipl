@@ -20,7 +20,6 @@ const LoginForm = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log('Name:', name, 'Value:', value);
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 

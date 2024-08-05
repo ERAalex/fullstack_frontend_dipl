@@ -3,8 +3,10 @@ import apiUrl from './apiConfig'
 
 export const fetchFiles = (userId) => {
     return async (dispatch) => {
-
       try {
+
+        console.log('-----FETCH----')
+        
         const token = localStorage.getItem('authorization');
         const isAdmin = localStorage.getItem('isAdmin') === 'true'
 
@@ -32,8 +34,6 @@ export const fetchFiles = (userId) => {
         }
 
         const data = await response.json();
-        console.log(data)
-        console.log('Fetched data files:', data)
         dispatch(fetchFilesSuccess(data));
       } catch (error) {
         dispatch(fetchFilesFailure(error.message));

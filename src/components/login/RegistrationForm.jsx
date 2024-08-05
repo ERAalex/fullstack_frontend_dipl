@@ -46,7 +46,6 @@ const RegistrationForm = () => {
     }
 
     setFormData((prevData) => ({ ...prevData, [name]: value }));
-    console.log(formData)
   };
 
 

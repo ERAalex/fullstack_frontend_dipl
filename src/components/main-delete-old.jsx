@@ -7,7 +7,6 @@ export function Main() {
 
   const { isLogined, isAdmin } = useSelector(store => store.auth)
   
-  console.log('----here--1-- ')
   const headerMenu = [
     {
       id: 1,

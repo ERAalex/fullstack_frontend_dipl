@@ -1,5 +1,4 @@
 import { fetchUsersSuccess, fetchUsersFailure } from './usersReducers';
-// import { accountInfoSuccess } from '../store/auth/authReducer';
 import { setLogout, setUserData } from '../store/auth/authReducer';
 import apiUrl from './apiConfig'
 

@@ -48,7 +48,7 @@ const Header = () => {
         <Link to="/">Home</Link>
         {isAuthorized ? (
           <>
-            <Link to="/files">Files</Link>
+            <Link to="/files?keepSelectedUser=False">Files</Link>
             {isAdmin && <Link to="/UsersList">See all Users</Link>}
             <button onClick={handleLogout}>Logout</button>
           </>

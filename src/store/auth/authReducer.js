@@ -14,6 +14,7 @@ const initialState = {
   isLogined: refresh?true:false,
   isAdmin: isAdmin?isAdmin:false,
   userIdData: userIdData?userIdData:0,
+  selectedUserByAdmin: null,
   storageId: null,
   storageName: null,
   tokenData: {
@@ -81,9 +82,22 @@ export const authReducer = createSlice({
         isAdmin: action.payload.isAdmin
       }
     },
+
+    userSelectedAdmin: (state, action) => {
+      return {
+        ...state,
+        selectedUserByAdmin: action.payload
+      }
+    },
+
+    clearUserSelectedAdmin: (state) => {
+      return {
+        ...state,
+        selectedUserByAdmin: null
+      }
+    },
     
     accountInfoSuccess : (state, action) => {
-      console.log('-----successs-----')
       state.isLogined = true;
       state.isAdmin = action.payload.isAdmin; 
       state.userIdData = action.payload.id; 
@@ -91,5 +105,5 @@ export const authReducer = createSlice({
   }
 })
 
-export const { accountInfoSuccess, loginSuccess, setUserData, setLogout, setStorageId } = authReducer.actions
+export const { accountInfoSuccess, userSelectedAdmin, clearUserSelectedAdmin, loginSuccess, setUserData, setLogout, setStorageId } = authReducer.actions
 export default authReducer.reducer;
