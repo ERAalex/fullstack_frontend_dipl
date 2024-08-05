@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -11,13 +12,11 @@ import NotificationModal from '../utils-instruments/utils';
 import InformationModal from '../info/Info';
 import { adminUserListInfo } from '../info/Info';
 
+import FileList from '../files/filelist/FileList';
 
 import {parseFileSize} from '../utils-instruments/utils';
-
 import './usersList.css';
 
-import { Cookies } from "react-cookie";
-const cookies = new Cookies();
 
 const UsersList = () => {
   const dispatch = useDispatch();
@@ -31,6 +30,9 @@ const UsersList = () => {
 
   const [userIdToDelete, setUserIdToDelete] = useState(null);
   const [files, setFiles] = useState([]);
+
+
+  const [selectedUserId, setSelectedUserId] = useState(null); // State for selected user ID
 
   const currentUserId = useSelector((state) => state.auth.userData?.userId); 
   console.log(currentUserId)
@@ -84,8 +86,18 @@ const UsersList = () => {
     dispatch(changeStatus(userId));
   };
 
+
+// Handle notification close
   const handleNotificationClose = () => {
     setNotificationVisible(false);
+  };
+
+
+
+  // Handle user selection SHOW and NOT TO SHOW
+  const handleUsernameClick = (userId) => {
+    // Toggle the selected user ID
+    setSelectedUserId(prevId => (prevId === userId ? null : userId));
   };
 
 
@@ -112,7 +124,7 @@ const UsersList = () => {
 
   return (
     <div>
-      
+
       {/* information modal for admin */}
       <button className="info-button" onClick={() => setInfoModalVisible(true)}>
         <FontAwesomeIcon icon={faInfoCircle} /> Admin Info
@@ -139,7 +151,15 @@ const UsersList = () => {
               return (
                 
               <tr key={user.id}>
-                <td>{user.username}</td>
+              
+                <td
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => handleUsernameClick(user.id)}
+                >
+                  {user.username} 
+                </td>
+
+
                 <td>{count}</td>
                 <td>{totalSize}</td>
                 <td>{user.email}</td>
@@ -185,6 +205,12 @@ const UsersList = () => {
         content={adminUserListInfo} 
       />
     </div>
+
+      <br></br>
+      {/* Render FilesList if a user is selected */}
+      {selectedUserId && (
+        <FileList userId={selectedUserId} />
+      )}
 
   </div>
   );

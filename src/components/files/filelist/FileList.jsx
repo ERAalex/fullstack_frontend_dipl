@@ -9,10 +9,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faLink, faLock } from '@fortawesome/free-solid-svg-icons';
 
 import { fetchFiles, deleteFile, downloadFile, changeFile, copyLinkFile, changeLinkSecurity  } from '../../../redux/filesActions';
-
 import './filelist.css'
 
-const FilesList = () => {
+
+
+const FilesList = ({ userId }) => {
   const dispatch = useDispatch();
   const files = useSelector((state) => state.files.files);
   const loading = useSelector((state) => state.files.loading);
@@ -23,7 +24,7 @@ const FilesList = () => {
   const [editingFileId, setEditingFileId] = useState(null);
 
   useEffect(() => {
-      dispatch(fetchFiles());
+      dispatch(fetchFiles(userId));
   }, [dispatch, ]);
 
   if (loading) {
@@ -148,7 +149,8 @@ const FilesList = () => {
         ))
       )}
 
-      <AddFiles />
+      {/* Conditionally render AddFiles component -> in case if it is admin who looks for file storage*/}
+      {!userId && <AddFiles />}
     </div>
   );
 };
