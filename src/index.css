@@ -87,11 +87,16 @@ html, body {
   overflow: auto;    
 }
 
-/* Content styling within app-container */
 .content {
   width: 100%;
-  max-width: 800px; 
+  max-width: 800px;
   padding: 20px;
   box-sizing: border-box;
-  overflow: auto; 
+  overflow: auto; /* Enable scrolling if content overflows */
+}
+
+.content > * {
+  transform: scale(0.9); /* Scale content down to 90% */
+  transform-origin: top left; /* Keep scaling from the top-left corner */
+  width: 111.1%; /* Adjust width to prevent scaling issues */
 }
