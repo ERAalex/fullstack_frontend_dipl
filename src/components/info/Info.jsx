@@ -11,6 +11,7 @@ export function Info() {
 }
 
 
+// here we can create diferent options to use InformationModal in different cases...
 export const adminUserListInfo = {
   title: 'Admin Information',
   subtitle: 'Here is some advice that can help you:',

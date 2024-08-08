@@ -7,8 +7,7 @@ import './addFiles.css'
 const AddFiles = () => {
   const dispatch = useDispatch();
   const [file, setFile] = useState(null);
-  const [comment, setComment] = useState(''); // New state for comment
-
+  const [comment, setComment] = useState('');
 
   // File and Comment Change control
   const handleFileChange = (event) => {
@@ -27,11 +26,10 @@ const AddFiles = () => {
       try {
         const formData = new FormData();
         formData.append('file', file);
-        formData.append('comment', comment); // Append comment to formData
+        formData.append('comment', comment);
 
         dispatch(uploadFile(formData));
 
-        // Reset file and comment states
         setFile(null);
         setComment('');
       } catch (error) {

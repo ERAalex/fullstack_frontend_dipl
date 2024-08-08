@@ -100,7 +100,6 @@ html, body {
   box-sizing: border-box;
   overflow-y: auto; 
   overflow-x: hidden;
-
 }
 
 .content > * {

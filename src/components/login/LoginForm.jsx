@@ -20,7 +20,6 @@ const LoginForm = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log('Name:', name, 'Value:', value);
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
@@ -30,7 +29,7 @@ const LoginForm = () => {
     const loginResult = await login(formData);
 
     if (loginResult.success) {
-      dispatch(setUserData(loginResult.data));} // Dispatch the user data
+      dispatch(setUserData(loginResult.data));}
       
     if (loginResult.success) {
       console.log('Login successfully');

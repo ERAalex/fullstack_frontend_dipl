@@ -9,21 +9,32 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faLink, faLock } from '@fortawesome/free-solid-svg-icons';
 
 import { fetchFiles, deleteFile, downloadFile, changeFile, copyLinkFile, changeLinkSecurity  } from '../../../redux/filesActions';
-
 import './filelist.css'
 
-const FilesList = () => {
+
+
+const FilesList = ({ userId }) => {
   const dispatch = useDispatch();
   const files = useSelector((state) => state.files.files);
   const loading = useSelector((state) => state.files.loading);
   const error = useSelector((state) => state.files.error);
+  const selectedUserByAdmin = useSelector((state) => state.auth.selectedUserByAdmin);
+  const currentUserId = useSelector((state) => state.auth.userData?.userId); 
 
   const [newFileName, setNewFileName] = useState('');
   const [newDescription, setNewDescription] = useState('');
   const [editingFileId, setEditingFileId] = useState(null);
 
+
+    // Determine the effective user ID based on admin status and Redux state
+    const effectiveUserId = localStorage.getItem('isAdmin') === 'true' && selectedUserByAdmin 
+    ? selectedUserByAdmin 
+    : currentUserId;
+
+    console.log('--------FileList-------')  
+
   useEffect(() => {
-      dispatch(fetchFiles());
+      dispatch(fetchFiles(effectiveUserId));
   }, [dispatch, ]);
 
   if (loading) {
@@ -148,7 +159,8 @@ const FilesList = () => {
         ))
       )}
 
-      <AddFiles />
+      {/* Conditionally render AddFiles component -> in case if it is admin who looks for users file storage*/}
+      {!selectedUserByAdmin && <AddFiles />}
     </div>
   );
 };

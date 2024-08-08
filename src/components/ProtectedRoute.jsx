@@ -5,15 +5,6 @@ import { checkToken } from '../redux/usersActions';
 
 // This component protects routes that require authentication
 const ProtectedRoute = ({ children }) => {
-    /**
-     * `ProtectedRoute` Component
-     *
-     * Purpose:
-     * The `ProtectedRoute` component is designed to protect specific routes within a React application 
-     * by ensuring that users are authenticated before accessing those routes. It performs a token 
-     * verification check and conditionally renders the protected content based on the authentication status.
-     * 
-  */
 
   const navigate = useNavigate();
   const location = useLocation();

@@ -1,9 +1,13 @@
+
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faShieldAlt, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
 import { fetchUsers, deleteUser, changeStatus } from '../../redux/usersActions';
+import { userSelectedAdmin } from '../../store/auth/authReducer';
+
 import { fetchAllUsersFiles } from '../../redux/filesActions';
 import ConfirmationModal from './modal_confirmation/ModalConfirmation';
 import NotificationModal from '../utils-instruments/utils';
@@ -11,16 +15,16 @@ import NotificationModal from '../utils-instruments/utils';
 import InformationModal from '../info/Info';
 import { adminUserListInfo } from '../info/Info';
 
+import FileList from '../files/filelist/FileList';
 
 import {parseFileSize} from '../utils-instruments/utils';
-
 import './usersList.css';
 
-import { Cookies } from "react-cookie";
-const cookies = new Cookies();
+
 
 const UsersList = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate(); 
   const users = useSelector((state) => state.user.users);
 
   const [loading, setLoading] = useState(true);
@@ -31,6 +35,9 @@ const UsersList = () => {
 
   const [userIdToDelete, setUserIdToDelete] = useState(null);
   const [files, setFiles] = useState([]);
+
+
+  const [selectedUserId, setSelectedUserId] = useState(null); // State for selected user ID
 
   const currentUserId = useSelector((state) => state.auth.userData?.userId); 
   console.log(currentUserId)
@@ -84,10 +91,23 @@ const UsersList = () => {
     dispatch(changeStatus(userId));
   };
 
+
+// Handle notification close
   const handleNotificationClose = () => {
     setNotificationVisible(false);
   };
 
+
+  // Handle admin user selection
+  const handleUsernameClick = (userId) => {
+    if (localStorage.getItem('isAdmin') === 'true') {
+      dispatch(userSelectedAdmin(userId)); //
+      navigate('/files?keepSelectedUser=True'); // Redirect to /files
+    } else {
+      // Toggle the selected user ID if not an admin
+      setSelectedUserId(prevId => (prevId === userId ? null : userId));
+    }
+  };
 
 
   // Calculate the total size of user files -> size + total
@@ -112,7 +132,7 @@ const UsersList = () => {
 
   return (
     <div>
-      
+
       {/* information modal for admin */}
       <button className="info-button" onClick={() => setInfoModalVisible(true)}>
         <FontAwesomeIcon icon={faInfoCircle} /> Admin Info
@@ -139,7 +159,15 @@ const UsersList = () => {
               return (
                 
               <tr key={user.id}>
-                <td>{user.username}</td>
+              
+                <td
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => handleUsernameClick(user.id)}
+                >
+                  {user.username} 
+                </td>
+
+
                 <td>{count}</td>
                 <td>{totalSize}</td>
                 <td>{user.email}</td>
@@ -185,6 +213,12 @@ const UsersList = () => {
         content={adminUserListInfo} 
       />
     </div>
+
+      <br></br>
+      {/* Render FilesList if a user is selected */}
+      {selectedUserId && (
+        <FileList userId={selectedUserId} />
+      )}
 
   </div>
   );
