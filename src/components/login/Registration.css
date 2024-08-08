@@ -1,5 +1,4 @@
 
-/* Ensure the body and html take full height */
 html, body {
     height: 100%;
     margin: 0;
@@ -11,13 +10,13 @@ html, body {
 
 .registration-container {
     max-width: 400px;
-    width: 100%; /* Ensure the container doesn't exceed the max-width */
+    width: 100%; 
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
     background-color: #f9f9f9;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: to give a slight shadow effect */
-    box-sizing: border-box; /* Ensure padding and border are included in the element's total width and height */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+    box-sizing: border-box;
 }
 
 .registration-form label {

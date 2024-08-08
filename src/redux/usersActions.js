@@ -5,7 +5,7 @@ import apiUrl from './apiConfig'
 
 export const checkToken = async (navigate) => {
   /**
-   * Asynchronously checks the validity of the authorization token stored in localStorage
+   * Checks the validity of the authorization token stored in localStorage
    */
 
   try {
@@ -80,20 +80,6 @@ export const fetchUsers = () => {
 
 
 export const registerUser = async (formData) => {
-    /**
-   * Registers a new user with the provided form data.
-   *
-   * This function sends a POST request to the registration API endpoint with the user's
-   * details. If the registration is successful, it returns an object indicating success.
-   *
-   * @async
-   * @param {Object} formData - The form data containing user registration details.
-   * @param {string} formData.username - The username of the new user.
-   * @param {string} formData.password - The password of the new user.
-   * @param {string} formData.email - The email address of the new user.
-
-   also is added new model value - storage_path
-   */
 
     try {
       const requestData = {
@@ -155,7 +141,7 @@ export const login = async (formData) => {
 
       // proceed and return True to pass to /files
       if (accountDataResult.success) {
-        
+        console.log('-----LOGIN-----')
         return { success: true, data: accountDataResult.data };
       } else {
         return { success: false, error: accountDataResult.error };
@@ -229,7 +215,6 @@ export const accountinfo = async () => {
         }
         
         console.log('-----LOGOUT-----')
-        // dispatch({ type: 'LOGOUT_SUCCESS' });
         dispatch(setLogout());
 
         localStorage.removeItem('authorization');

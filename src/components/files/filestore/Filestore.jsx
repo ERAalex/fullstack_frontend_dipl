@@ -15,7 +15,7 @@ const FileStore = () => {
   const currentUserId = useSelector((state) => state.auth.userData?.userId); 
 
 
-  // Clear selected user if keepSelectedUser is not 'True'
+  // Clear selected user if keepSelectedUser is not 'True', in case if admin are using some user's interface
   useEffect(() => {
     if (!keepSelectedUser) {
       dispatch(clearUserSelectedAdmin());

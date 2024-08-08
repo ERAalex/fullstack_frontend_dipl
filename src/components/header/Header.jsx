@@ -13,14 +13,13 @@ const Header = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   console.log('----HEADER CURRENT USER CHECK----')
-  const currentUserId = useSelector((state) => state.auth); // Use optional chaining to safely access userId
+  const currentUserId = useSelector((state) => state.auth);
   console.log(currentUserId)
 
 
   // Retrieve 'isAdmin' from localStorage and convert it to a boolean
-  const isAdmin = localStorage.getItem('isAdmin') === 'true'; // Ensure this is a boolean comparison
-  console.log('----admin----se---')
-  console.log(isAdmin);
+  const isAdmin = localStorage.getItem('isAdmin') === 'true';
+  console.log('----HEADER---')
 
   useEffect(() => {
     const verifyToken = async () => {

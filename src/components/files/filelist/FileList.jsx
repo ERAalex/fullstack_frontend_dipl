@@ -31,8 +31,7 @@ const FilesList = ({ userId }) => {
     ? selectedUserByAdmin 
     : currentUserId;
 
-    console.log('--------DATA_---_____DATA_---')  
-    console.log(effectiveUserId)
+    console.log('--------FileList-------')  
 
   useEffect(() => {
       dispatch(fetchFiles(effectiveUserId));

@@ -2,7 +2,7 @@ import React from 'react';
 import './NotificationModal.css'; 
 
 
-// Utility function to parse filesize string to number
+// Utility function to parse filesize string to number. Need to not create a lot of functions inside components
 const parseFileSize = (sizeStr) => {
     if (typeof sizeStr !== 'string') return 0;
     return parseInt(sizeStr.replace(/,/g, ''), 10) || 0;

@@ -5,7 +5,7 @@ export const fetchFiles = (userId) => {
     return async (dispatch) => {
       try {
 
-        console.log('-----FETCH----')
+        console.log('-----FETCH-FILES----')
         
         const token = localStorage.getItem('authorization');
         const isAdmin = localStorage.getItem('isAdmin') === 'true'
@@ -111,7 +111,14 @@ export const downloadFile = (fileId, fileName, fileType) => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to download file');
+        const errorData = await response.json();
+
+        if (errorData.error) {
+          alert(`Ошибка: ${errorData.error}`);
+          throw new Error(`Ошибка: ${errorData.error}`);
+        } else {
+          throw new Error(`Ошибка: ${errorData}`);
+        }
       }
   
       // Create a Blob from the response
