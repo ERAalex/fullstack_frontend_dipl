@@ -5,4 +5,6 @@ This template provides a minimal setup to get React working in Vite with HMR and
 docker-compose build
 docker-compose up
 
+fixs accaunt github
+
 yarn use
