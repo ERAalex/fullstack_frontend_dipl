@@ -11,11 +11,14 @@ import { userSelectedAdmin } from '../../store/auth/authReducer';
 import { fetchAllUsersFiles } from '../../redux/filesActions';
 import ConfirmationModal from './modal_confirmation/ModalConfirmation';
 import NotificationModal from '../utils-instruments/utils';
+import AdminUserModal from './adminUserCreation/AdminUserModal';
 
 import InformationModal from '../info/Info';
 import { adminUserListInfo } from '../info/Info';
 
 import FileList from '../files/filelist/FileList';
+
+import AdminUserRegistration from './adminUserCreation/AdminUserCreation';
 
 import {parseFileSize} from '../utils-instruments/utils';
 import './usersList.css';
@@ -38,6 +41,7 @@ const UsersList = () => {
 
 
   const [selectedUserId, setSelectedUserId] = useState(null); // State for selected user ID
+  const [showAdminModal, setShowAdminModal] = useState(false);
 
   const currentUserId = useSelector((state) => state.auth.userData?.userId); 
   console.log(currentUserId)
@@ -79,7 +83,6 @@ const UsersList = () => {
     setUserIdToDelete(null);
     setModalVisible(false);
   };
-
 
   // Handle admin status toggle
   const handleAdminStatusToggle = (userId) => {
@@ -220,6 +223,21 @@ const UsersList = () => {
         <FileList userId={selectedUserId} />
       )}
 
+
+    <div>
+      {/* Button to open the admin user registration modal */}
+      <button onClick={() => setShowAdminModal(true)}>
+        Create User
+      </button>
+
+      {/* Admin user registration modal */}
+      <AdminUserModal
+        show={showAdminModal}
+        onClose={() => setShowAdminModal(false)}
+      >
+        <AdminUserRegistration />
+      </AdminUserModal>
+    </div>
   </div>
   );
 };

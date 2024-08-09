@@ -86,9 +86,16 @@ export const registerUser = async (formData) => {
           username: formData.username,
           password: formData.password,
           email: formData.email,
+          isAdmin: formData.isAdmin,
       };
   
-      const response = await fetch(`${apiUrl}/api/create-user/`, {
+      if (formData.isAdmin) {
+        requestData.code = '123456'; // Example code, can be set from an environment variable or other secure source
+      }
+
+      const endpoint = formData.isAdmin ? `${apiUrl}/api/create-admin/` : `${apiUrl}/api/create-user/`;
+
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -147,6 +154,11 @@ export const login = async (formData) => {
         return { success: false, error: accountDataResult.error };
       }
     } else {
+      if (response.status === 401) {
+        // Show alert for unauthorized access
+        alert('Unauthorized: Please check your username and password.');
+      }
+      
       const errorData = await response.json();
       return { success: false, error: errorData.error };
     }
