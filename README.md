@@ -59,13 +59,13 @@ Additional tech:<br/>
 [![SkillIcons](https://skillicons.dev/icons?i=css)](https://skillicons.dev) CSS <br/>
 <br/><br/>
 
-## To start backend part of project:
+## To start frontend part of project:
 
-To facilitate the project setup, a working Dockerfile, Docker Compose file, and scripts for proper project initialization have been prepared.
+To facilitate the project setup, a working Dockerfile, Docker Compose file have been prepared.
 
 - Download the project.
-- Configure the .env file (an example is provided in .env-example).
 - Run docker-compose up -d
+- Configure the ‘admin code’ for the registration endpoint. Locate the registerUser function and set requestData.code = '123456'. Ensure this code matches the value in the .env file on the backend part of the project. It's required to create ADMIN users from Admin interface on app.
 
 - It’s possible that you will have to wait until the backend containers start, and the app is running correctly.
 
